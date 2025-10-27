@@ -24,8 +24,13 @@ class App extends Component {
    }
    
    handleSubmit (){
-    this.setState({tasks:[...this.state.tasks, this.state.text]});
-    this.setState({text: ''});
+    // Only add task if input is not empty or just whitespace
+    if (this.state.text.trim() !== '') {
+      this.setState({
+        tasks: [...this.state.tasks, this.state.text.trim()],
+        text: ''
+      });
+    }
    };
 
    handleDelete (id){
@@ -45,7 +50,7 @@ class App extends Component {
       text = {this.state.text}/>
       
       {this.state.tasks.map((currTask, index) =>{
-        return <TaskComponent task = {currTask} id = {index} handleDelete = {this.handleDelete}/>
+        return <TaskComponent key = {index} task = {currTask} id = {index} handleDelete = {this.handleDelete}/>
       })}
 
       </div>
