@@ -1,24 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class SubmitComponent extends Component {
+const SubmitComponent = ({ text, handleChange, handleSubmit }) => {
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    handleSubmit();
+  };
 
-   handleFormSubmit = (event) => {
-     event.preventDefault();
-     this.props.handleSubmit();
-   }
-
-   render () {
-     return (
-       <div>
-         <form onSubmit = {this.handleFormSubmit}>
-           <input placeholder = "enter task" type="text" value = {this.props.text} onChange = {this.props.handleChange} />
-           <button type="submit">Submit</button>
-         </form>
-         <h1>{this.props.text}</h1>
-       </div>
-     )
-   };
-// test
+  return (
+    <div>
+      <form onSubmit={handleFormSubmit}>
+        <input
+          placeholder="enter task"
+          type="text"
+          value={text}
+          onChange={handleChange}
+        />
+        <button type="submit">Submit</button>
+      </form>
+      <h1>{text}</h1>
+    </div>
+  );
 };
 
 export default SubmitComponent;
