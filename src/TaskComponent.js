@@ -1,16 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class TaskComponent extends Component {
-   render () {
-     return (
-       <div>
-       <span>{this.props.task}     </span>  
-       <button id = {this.props.id} onClick = {() => this.props.handleDelete(this.props.id)}>Delete</button>
-       
-       </div>
-     )
-   }
-
+const TaskComponent = ({ task, id, handleDelete }) => {
+  return (
+    <div>
+      <span>{task}     </span>
+      <button id={id} onClick={() => handleDelete(id)}>Delete</button>
+    </div>
+  );
 };
 
 export default TaskComponent;

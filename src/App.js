@@ -1,62 +1,51 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import TaskComponent from './TaskComponent';
 import SubmitComponent from './SubmitComponent';
 
-class App extends Component {
-   
-   constructor(props){
-    super(props);
-    this.state = {
-      text: '',
-      tasks:['walk the dog', 'finish homework'],
-      
-    };
+const App = () => {
+  const [text, setText] = useState('');
+  const [tasks, setTasks] = useState(['walk the dog', 'finish homework']);
 
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleDelete = this.handleDelete.bind(this)
-   };
+  // Track changes in the text input
+  const handleChange = (event) => {
+    setText(event.target.value);
+  };
 
-   //track changes in the text bar
-
-   handleChange(event) {
-    this.setState({text: event.target.value});
-   }
-   
-   handleSubmit (){
+  const handleSubmit = () => {
     // Only add task if input is not empty or just whitespace
-    if (this.state.text.trim() !== '') {
-      this.setState({
-        tasks: [...this.state.tasks, this.state.text.trim()],
-        text: ''
-      });
+    if (text.trim() !== '') {
+      setTasks([...tasks, text.trim()]);
+      setText('');
     }
-   };
+  };
 
-   handleDelete (id){
-     //make a shallow copy of state
-     let copy = [...this.state.tasks];
-     copy.splice(id, 1);
-     this.setState({tasks:copy});   
-   };
-   
-   render () {
-   
-    return (
-      <div>
+  const handleDelete = (id) => {
+    // Make a shallow copy of tasks and remove the item at index
+    const copy = [...tasks];
+    copy.splice(id, 1);
+    setTasks(copy);
+  };
+
+  return (
+    <div>
       <SubmitComponent
-      handleChange = {this.handleChange}
-      handleSubmit = {this.handleSubmit}
-      text = {this.state.text}/>
-      
-      {this.state.tasks.map((currTask, index) =>{
-        return <TaskComponent key = {index} task = {currTask} id = {index} handleDelete = {this.handleDelete}/>
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        text={text}
+      />
+
+      {tasks.map((currTask, index) => {
+        return (
+          <TaskComponent
+            key={index}
+            task={currTask}
+            id={index}
+            handleDelete={handleDelete}
+          />
+        );
       })}
-
-      </div>
-    )
-  }
+    </div>
+  );
 };
-
 
 export default App;
