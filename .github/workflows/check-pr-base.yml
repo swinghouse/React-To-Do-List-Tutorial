@@ -1,0 +1,45 @@
+name: PR Base Guard
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  check-base:
+    name: Ensure PR targets swinghouse/dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check pull request base
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const baseRepo = context.payload.pull_request.base.repo.full_name;
+            const baseBranch = context.payload.pull_request.base.ref;
+            const expectedRepo = 'swinghouse/React-To-Do-List-Tutorial';
+            const expectedBranch = 'dev';
+            if (baseRepo !== expectedRepo || baseBranch !== expectedBranch) {
+              const msg = `:warning: The pull request base must be **${expectedRepo}** and branch **${expectedBranch}**.\n\nCurrent base: **${baseRepo}** on branch **${baseBranch}**. Please change the base to the correct repository/branch before merging.`;
+              // Post a comment on the PR
+              await github.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: msg
+              });
+
+              // Try to add a label (if it exists)
+              try {
+                await github.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.pull_request.number,
+                  labels: ['wrong-base']
+                });
+              } catch (e) {
+                // ignore label failures
+              }
+
+              throw new Error(msg);
+            } else {
+              console.log('PR base is correct.');
+            }
