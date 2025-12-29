@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 class SubmitComponent extends Component {
 
@@ -8,6 +10,8 @@ class SubmitComponent extends Component {
    }
 
    render () {
+     const deadline = this.props.deadline ? new Date(this.props.deadline) : null;
+     
      return (
        <div>
          <form onSubmit={this.handleFormSubmit}>
@@ -17,11 +21,14 @@ class SubmitComponent extends Component {
              value={this.props.text}
              onChange={this.props.handleChange}
            />
-           <input
-             type="date"
-             value={this.props.deadline}
-             onChange={this.props.handleDateChange}
-             placeholder="Select deadline"
+           <DatePicker
+             selected={deadline}
+             onChange={(date) => {
+               const formattedDate = date ? date.toISOString().split('T')[0] : '';
+               this.props.handleDateChange({ target: { value: formattedDate } });
+             }}
+             placeholderText="Select deadline"
+             dateFormat="MMM dd, yyyy"
            />
            <button type="submit">Submit</button>
          </form>
