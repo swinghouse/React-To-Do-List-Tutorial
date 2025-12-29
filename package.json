@@ -12,9 +12,13 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
+  "devDependencies": {
+    "husky": "^8.0.0"
+  },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
