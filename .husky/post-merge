@@ -1,0 +1,5 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Checking for package changes and installing deps if needed..."
+node ./scripts/post-merge.js

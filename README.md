@@ -16,9 +16,9 @@ Once everything is set up, `fork` and `clone` this repo.
 
 To download dependencies:
 
-$ npm install 
+$ npm install  
 
-
+> Automatic installs: this repo includes a Git `post-merge` hook (via Husky) that will run `npm ci` automatically when `package.json` or `package-lock.json` change during a pull/merge. This helps keep `node_modules` synced after pulling changes. If you prefer not to use the hook, remove `.husky/post-merge` or skip running `npm install` locally.
 # Available Scripts
 
 In the project directory, you can run:
