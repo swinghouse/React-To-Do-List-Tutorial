@@ -1,0 +1,31 @@
+name: Bot — Create Issue (manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-issue:
+    name: Create an issue using bot token
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create issue via bot token
+        uses: actions/github-script@v6
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        with:
+          script: |
+            const octokit = github.getOctokit(process.env.BOT_TOKEN);
+            const { data } = await octokit.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Bot test issue (workflow) - ${new Date().toISOString()}`,
+              body: 'This issue was created by the bot via a manual workflow run using `secrets.BOT_TOKEN`.'
+            });
+            console.log('Issue created:', data.html_url);
+            await octokit.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: data.number,
+              labels: ['bot-test']
+            });
